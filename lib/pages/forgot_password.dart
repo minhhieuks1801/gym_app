@@ -10,7 +10,6 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  TextEditingController usernameController = TextEditingController();
   String username = '';
 
   @override

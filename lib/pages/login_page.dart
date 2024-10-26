@@ -16,6 +16,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String username = '', password = '';
+  String? passwordError;
   bool isShowPassword = false, isCheck = false;
 
   @override
@@ -29,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             const Expanded(child: SizedBox()),
             const Text(
-              'ĐĂNG KÝ 1 THÁNG TẬP 3 NGÀY',
+              'GYM APP',
               textAlign: TextAlign.center,
               maxLines: 2,
               style: TextStyle(

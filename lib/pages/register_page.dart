@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gym_app/common/ultils/regex.dart';
 import 'package:gym_app/widget/button_app.dart';
 import 'package:gym_app/widget/footer_login.dart';
 import 'package:gym_app/widget/input_app_user_name.dart';
@@ -13,12 +12,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController usernameController = TextEditingController(),
-      passwordController = TextEditingController(),
-      confirmPasswordController = TextEditingController();
   String username = '', password = '', confirmPassword = '';
-  String? errorUsername, errorPassword, errorConfirmPassword;
   bool isShowPassword = false, isConfirmShowPassword = false;
+  String? confirmPasswordError;
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 16,
             ),
             InputPasswordWidget(
+              error: confirmPasswordError,
               hintText: 'Nhập lại mật khẩu',
               title: 'Nhập lại mật khẩu',
               onChange: (value) => _setConfirmPassword(
@@ -103,19 +100,15 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _setUsername({String? value}) {
     setState(() {
-      username = value??"";
+      username = value ?? "";
     });
   }
 
   _setPassword({required String value}) {
     setState(() {
-      if (value.isEmpty) {
-        errorPassword = 'Mật khẩu không được để trống';
-      } else if (!RegexInput.regex.hasMatch(value)) {
-        errorPassword = 'Sai định dạng mật khẩu';
-      } else {
-        errorPassword = null;
-      }
+      confirmPasswordError = password != confirmPassword && confirmPassword.isNotEmpty
+          ? 'Mật khẩu không trùng khớp'
+          : null;
       password = value;
     });
   }
@@ -128,7 +121,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _setConfirmPassword({required String value}) {
     setState(() {
-      errorConfirmPassword = password != value ? 'Mật khẩu không trùng khớp' : null;
+      confirmPasswordError = password != confirmPassword && password.isNotEmpty
+          ? 'Mật khẩu không trùng khớp'
+          : null;
       confirmPassword = value;
     });
   }

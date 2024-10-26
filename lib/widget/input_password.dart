@@ -8,6 +8,7 @@ class InputPasswordWidget extends StatefulWidget {
   final bool isShowPassword;
   final String hintText;
   final String title;
+  final String? error;
 
   const InputPasswordWidget({
     super.key,
@@ -16,6 +17,7 @@ class InputPasswordWidget extends StatefulWidget {
     required this.title,
     required this.showPassword,
     this.isShowPassword = false,
+    this.error,
   });
 
   @override
@@ -80,7 +82,7 @@ class _InputPasswordWidgetState extends State<InputPasswordWidget> {
     if (!RegexInput.regex.hasMatch(value)) {
       return 'Sai định dạng mật khẩu';
     }
-    return null;
+    return widget.error;
   }
 
   _onChange(String value) {
