@@ -16,13 +16,13 @@ class FooterLoginWidget extends StatelessWidget {
           textAlign: TextAlign.center,
           maxLines: 2,
           style: const TextStyle(
-            color: Colors.teal,
+            color: Colors.black,
             fontSize: 12,
             fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(
-          width: 16,
+          width: 8,
         ),
         InkWell(
           onTap: () => callback.call(),

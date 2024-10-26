@@ -34,7 +34,7 @@ class ButtonApp extends StatelessWidget {
         title,
         style: TextStyle(
           color: colorText,
-          fontSize: 20,
+          fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gym_app/common/ultils/regex.dart';
 import 'package:gym_app/widget/button_app.dart';
 import 'package:gym_app/widget/footer_login.dart';
-import 'package:gym_app/widget/input_app.dart';
+import 'package:gym_app/widget/input_app_user_name.dart';
 import 'package:gym_app/widget/input_password.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -49,13 +49,11 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 16,
             ),
-            InputAppWidget(
+            InputAppUserNameWidget(
               hintText: 'Tên tài khoản',
-              controller: usernameController,
               onChange: (value) => _setUsername(
                 value: value,
               ),
-              error: errorUsername,
               title: 'Tên tài khoản',
             ),
             const SizedBox(
@@ -64,13 +62,11 @@ class _RegisterPageState extends State<RegisterPage> {
             InputPasswordWidget(
               hintText: 'Mật khẩu',
               title: 'Mật khẩu',
-              controller: passwordController,
               onChange: (value) => _setPassword(
                 value: value,
               ),
               isShowPassword: isShowPassword,
               showPassword: () => _isShowPassword(),
-              error: errorPassword,
             ),
             const SizedBox(
               height: 16,
@@ -78,13 +74,11 @@ class _RegisterPageState extends State<RegisterPage> {
             InputPasswordWidget(
               hintText: 'Nhập lại mật khẩu',
               title: 'Nhập lại mật khẩu',
-              controller: confirmPasswordController,
               onChange: (value) => _setConfirmPassword(
                 value: value,
               ),
               isShowPassword: isConfirmShowPassword,
               showPassword: () => _isConfirmShowPassword(),
-              error: errorConfirmPassword,
             ),
             const SizedBox(
               height: 32,
@@ -107,10 +101,9 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  _setUsername({required String value}) {
+  _setUsername({String? value}) {
     setState(() {
-      errorUsername =  value.isEmpty? 'Tên tài khoản không được để trống': null;
-      username = value;
+      username = value??"";
     });
   }
 

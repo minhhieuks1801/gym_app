@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gym_app/common/ultils/regex.dart';
+import 'package:gym_app/pages/forgot_password.dart';
 import 'package:gym_app/pages/register_page.dart';
 import 'package:gym_app/widget/button_app.dart';
+import 'package:gym_app/widget/check_box_save_login.dart';
 import 'package:gym_app/widget/footer_login.dart';
 import 'package:gym_app/widget/input_password.dart';
-import 'package:gym_app/widget/input_app.dart';
+import 'package:gym_app/widget/input_app_user_name.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,11 +15,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController usernameController = TextEditingController(),
-      passwordController = TextEditingController();
   String username = '', password = '';
-  String? errorUsername, errorPassword;
-  bool isShowPassword = false;
+  bool isShowPassword = false, isCheck = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +41,11 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 16,
             ),
-            InputAppWidget(
+            InputAppUserNameWidget(
               hintText: 'Tên tài khoản',
-              controller: usernameController,
               onChange: (value) => _setUsername(
                 value: value,
               ),
-              error: errorUsername,
               title: 'Tên tài khoản',
             ),
             const SizedBox(
@@ -58,13 +54,19 @@ class _LoginPageState extends State<LoginPage> {
             InputPasswordWidget(
               hintText: 'Mật khẩu',
               title: 'Mật khẩu',
-              controller: passwordController,
               onChange: (value) => _setPassword(
                 value: value,
               ),
               isShowPassword: isShowPassword,
               showPassword: () => _isShowPassword(),
-              error: errorPassword,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            CheckboxSaveLoginWidget(
+              isCheck: isCheck,
+              callbackSave: () => _setSaveLogin(),
+              callbackForgotPassword: () => _nextForgotPasswordScreen(context: context),
             ),
             const SizedBox(
               height: 32,
@@ -86,22 +88,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _setUsername({required String value}) {
+  _setUsername({String? value}) {
     setState(() {
-      errorUsername =  value.isEmpty? 'Tên tài khoản không được để trống': null;
-      username = value;
+      username = value??'';
     });
   }
 
   _setPassword({required String value}) {
     setState(() {
-      if (value.isEmpty) {
-        errorPassword = 'Mật khẩu không được để trống';
-      } else if (!RegexInput.regex.hasMatch(value)) {
-        errorPassword = 'Sai định dạng mật khẩu';
-      } else {
-        errorPassword = null;
-      }
       password = value;
     });
   }
@@ -118,6 +112,20 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => const RegisterPage(),
+      ),
+    );
+  }
+
+  _setSaveLogin() {
+    setState(() {
+      isCheck = !isCheck;
+    });
+  }
+
+  _nextForgotPasswordScreen({required BuildContext context}) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const ForgotPassword(),
       ),
     );
   }
