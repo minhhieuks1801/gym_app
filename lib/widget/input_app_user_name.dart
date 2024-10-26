@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 class InputAppUserNameWidget extends StatefulWidget {
-  final ValueChanged<String?> onChange;
+  final TextEditingController controller;
   final String hintText;
   final String title;
+  final GlobalKey<FormState> formKey;
+
 
   const InputAppUserNameWidget({
+    required this.controller,
     super.key,
-    required this.onChange,
     this.hintText = '',
-    required this.title,
+    required this.title, required this.formKey,
   });
 
   @override
@@ -17,7 +19,6 @@ class InputAppUserNameWidget extends StatefulWidget {
 }
 
 class _InputAppUserNameWidgetState extends State<InputAppUserNameWidget> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +27,20 @@ class _InputAppUserNameWidgetState extends State<InputAppUserNameWidget> {
       children: [
         Text(
           widget.title,
-          style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         const SizedBox(
           height: 8,
         ),
         Form(
-          key: formKey,
+          key: widget.formKey,
           child: TextFormField(
+            controller: widget.controller,
             validator: _validator,
-            onChanged: (value) => _setChange(value),
             decoration: InputDecoration(
               hintText: widget.hintText,
               helperStyle: const TextStyle(
@@ -59,14 +64,8 @@ class _InputAppUserNameWidgetState extends State<InputAppUserNameWidget> {
   }
 
   String? _validator(String? value) {
-    return value == null ||  value.isEmpty ? 'Tên tài khoản không được để trống' : null;
-  }
-
-  _setChange(String? value) {
-    widget.onChange.call(value);
-    final bool isValid = formKey.currentState?.validate() ?? false;
-    if (!isValid) {
-      return;
-    }
+    return (value == null || value.isEmpty)
+        ? 'Tên tài khoản không được để trống'
+        : null;
   }
 }

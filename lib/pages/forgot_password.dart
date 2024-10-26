@@ -10,7 +10,8 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  String username = '';
+  TextEditingController usernameController = TextEditingController();
+  GlobalKey<FormState> usernameFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +32,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         child: Column(
           children: [
             InputAppUserNameWidget(
+              formKey: usernameFormKey,
+              controller: usernameController,
               hintText: 'Tên tài khoản',
-              onChange: (value) => _setUsername(
-                value: value,
-              ),
               title: 'Tên tài khoản',
             ),
             const SizedBox(
@@ -53,15 +53,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 
-  String? validateUserName(){
-    return username.isEmpty ? 'Không được để trống' : null;
+  _submitForgotPassword() {
+    final validateUsername = usernameFormKey.currentState?.validate() ?? false;
+    if (validateUsername) {}
   }
-
-  _setUsername({String? value}) {
-    setState(() {
-      username = value??"";
-    });
-  }
-
-  _submitForgotPassword() {}
 }

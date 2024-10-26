@@ -15,9 +15,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String username = '', password = '';
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  GlobalKey<FormState> usernameFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> passwordFormKey = GlobalKey<FormState>();
   String? passwordError;
-  bool isShowPassword = false, isCheck = false;
+  bool isShowPassword = false, isCheck = false, isSubmit = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,21 +46,19 @@ class _LoginPageState extends State<LoginPage> {
               height: 16,
             ),
             InputAppUserNameWidget(
+              formKey: usernameFormKey,
               hintText: 'Tên tài khoản',
-              onChange: (value) => _setUsername(
-                value: value,
-              ),
               title: 'Tên tài khoản',
+              controller: usernameController,
             ),
             const SizedBox(
               height: 16,
             ),
             InputPasswordWidget(
+              formKey: passwordFormKey,
               hintText: 'Mật khẩu',
               title: 'Mật khẩu',
-              onChange: (value) => _setPassword(
-                value: value,
-              ),
+              controller: passwordController,
               isShowPassword: isShowPassword,
               showPassword: () => _isShowPassword(),
             ),
@@ -89,25 +90,19 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _setUsername({String? value}) {
-    setState(() {
-      username = value??'';
-    });
-  }
-
-  _setPassword({required String value}) {
-    setState(() {
-      password = value;
-    });
-  }
-
   _isShowPassword() {
     setState(() {
       isShowPassword = !isShowPassword;
     });
   }
 
-  _submitLogin() {}
+  _submitLogin() {
+    final bool isValidUsername = usernameFormKey.currentState?.validate() ?? false;
+    final bool isValidPassword = passwordFormKey.currentState?.validate() ?? false;
+    if (isValidUsername && isValidPassword) {
+
+    }
+  }
 
   _nextRegisterScreen({required BuildContext context}) {
     Navigator.of(context).push(

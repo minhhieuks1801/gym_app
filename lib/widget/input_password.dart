@@ -3,21 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:gym_app/common/ultils/regex.dart';
 
 class InputPasswordWidget extends StatefulWidget {
-  final ValueChanged<String> onChange;
   final VoidCallback showPassword;
   final bool isShowPassword;
   final String hintText;
   final String title;
   final String? error;
+  final TextEditingController controller;
+  final GlobalKey<FormState> formKey;
 
   const InputPasswordWidget({
     super.key,
-    required this.onChange,
     this.hintText = '',
     required this.title,
     required this.showPassword,
     this.isShowPassword = false,
     this.error,
+    required this.controller,
+    required this.formKey,
   });
 
   @override
@@ -25,8 +27,6 @@ class InputPasswordWidget extends StatefulWidget {
 }
 
 class _InputPasswordWidgetState extends State<InputPasswordWidget> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -44,10 +44,10 @@ class _InputPasswordWidgetState extends State<InputPasswordWidget> {
           height: 8,
         ),
         Form(
-          key: formKey,
+          key: widget.formKey,
           child: TextFormField(
+            controller: widget.controller,
             validator: _validator,
-            onChanged: (value) => _onChange(value),
             obscureText: widget.isShowPassword,
             decoration: InputDecoration(
               suffixIcon: InkWell(
@@ -76,20 +76,12 @@ class _InputPasswordWidgetState extends State<InputPasswordWidget> {
   }
 
   String? _validator(String? value) {
-    if (value == null || value.isEmpty) {
+    if ((value == null || value.isEmpty)) {
       return 'Mật khẩu không được để trống';
     }
     if (!RegexInput.regex.hasMatch(value)) {
       return 'Sai định dạng mật khẩu';
     }
     return widget.error;
-  }
-
-  _onChange(String value) {
-    widget.onChange.call(value);
-    final bool isValid = formKey.currentState?.validate() ?? false;
-    if (!isValid) {
-      return;
-    }
   }
 }

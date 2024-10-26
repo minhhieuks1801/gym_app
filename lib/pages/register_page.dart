@@ -12,7 +12,13 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String username = '', password = '', confirmPassword = '';
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  GlobalKey<FormState> usernameFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> passwordFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> confirmPasswordFormKey = GlobalKey<FormState>();
+
   bool isShowPassword = false, isConfirmShowPassword = false;
   String? confirmPasswordError;
 
@@ -46,21 +52,19 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 16,
             ),
             InputAppUserNameWidget(
+              formKey: usernameFormKey,
+              controller: usernameController,
               hintText: 'Tên tài khoản',
-              onChange: (value) => _setUsername(
-                value: value,
-              ),
               title: 'Tên tài khoản',
             ),
             const SizedBox(
               height: 16,
             ),
             InputPasswordWidget(
+              formKey: passwordFormKey,
+              controller: passwordController,
               hintText: 'Mật khẩu',
               title: 'Mật khẩu',
-              onChange: (value) => _setPassword(
-                value: value,
-              ),
               isShowPassword: isShowPassword,
               showPassword: () => _isShowPassword(),
             ),
@@ -68,12 +72,11 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 16,
             ),
             InputPasswordWidget(
+              formKey: confirmPasswordFormKey,
               error: confirmPasswordError,
+              controller: confirmPasswordController,
               hintText: 'Nhập lại mật khẩu',
               title: 'Nhập lại mật khẩu',
-              onChange: (value) => _setConfirmPassword(
-                value: value,
-              ),
               isShowPassword: isConfirmShowPassword,
               showPassword: () => _isConfirmShowPassword(),
             ),
@@ -98,33 +101,9 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  _setUsername({String? value}) {
-    setState(() {
-      username = value ?? "";
-    });
-  }
-
-  _setPassword({required String value}) {
-    setState(() {
-      confirmPasswordError = password != confirmPassword && confirmPassword.isNotEmpty
-          ? 'Mật khẩu không trùng khớp'
-          : null;
-      password = value;
-    });
-  }
-
   _isShowPassword() {
     setState(() {
       isShowPassword = !isShowPassword;
-    });
-  }
-
-  _setConfirmPassword({required String value}) {
-    setState(() {
-      confirmPasswordError = password != confirmPassword && password.isNotEmpty
-          ? 'Mật khẩu không trùng khớp'
-          : null;
-      confirmPassword = value;
     });
   }
 
@@ -134,7 +113,20 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  _submitRegister() {}
+  _submitRegister() {
+    //final username = usernameController.text;
+    final bool isValidUsername = usernameFormKey.currentState?.validate() ?? false;
+    final bool isValidPassword = passwordFormKey.currentState?.validate() ?? false;
+    final bool isValidConfirmPassword = confirmPasswordFormKey.currentState?.validate() ?? false;
+    final password = passwordController.text;
+    final confirmPassword = confirmPasswordController.text;
+    setState(() {
+      confirmPasswordError = password != confirmPassword && confirmPassword.isNotEmpty
+          ? 'Mật khẩu không trùng khớp'
+          : null;
+    });
+    if (isValidUsername && isValidPassword && isValidConfirmPassword) {}
+  }
 
   _nextLoginScreen({required BuildContext context}) {
     Navigator.of(context).pop();

@@ -19,23 +19,26 @@ class ButtonApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    return Container(
-      width: width,
-      decoration: BoxDecoration(
-        color: background,
-        border: Border.all(color: colorBorder, width: 1),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(10),
+    return InkWell(
+      onTap: () => callback.call(),
+      child: Container(
+        width: width,
+        decoration: BoxDecoration(
+          color: background,
+          border: Border.all(color: colorBorder, width: 1),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(10),
+          ),
         ),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      alignment: Alignment.center,
-      child: Text(
-        title,
-        style: TextStyle(
-          color: colorText,
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        alignment: Alignment.center,
+        child: Text(
+          title,
+          style: TextStyle(
+            color: colorText,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
