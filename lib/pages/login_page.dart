@@ -88,11 +88,7 @@ class _LoginPageState extends State<LoginPage> {
 
   _setUsername({required String value}) {
     setState(() {
-      if (value.isEmpty) {
-        errorUsername = 'Tên tài khoản không được để trống';
-      } else {
-        errorUsername = null;
-      }
+      errorUsername =  value.isEmpty? 'Tên tài khoản không được để trống': null;
       username = value;
     });
   }

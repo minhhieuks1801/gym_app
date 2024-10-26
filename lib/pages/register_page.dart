@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_app/common/ultils/regex.dart';
 import 'package:gym_app/widget/button_app.dart';
 import 'package:gym_app/widget/footer_login.dart';
 import 'package:gym_app/widget/input_app.dart';
@@ -83,7 +84,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               isShowPassword: isConfirmShowPassword,
               showPassword: () => _isConfirmShowPassword(),
-              error: errorPassword,
+              error: errorConfirmPassword,
             ),
             const SizedBox(
               height: 32,
@@ -108,12 +109,20 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _setUsername({required String value}) {
     setState(() {
+      errorUsername =  value.isEmpty? 'Tên tài khoản không được để trống': null;
       username = value;
     });
   }
 
   _setPassword({required String value}) {
     setState(() {
+      if (value.isEmpty) {
+        errorPassword = 'Mật khẩu không được để trống';
+      } else if (!RegexInput.regex.hasMatch(value)) {
+        errorPassword = 'Sai định dạng mật khẩu';
+      } else {
+        errorPassword = null;
+      }
       password = value;
     });
   }
@@ -126,6 +135,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _setConfirmPassword({required String value}) {
     setState(() {
+      errorConfirmPassword = password != value ? 'Mật khẩu không trùng khớp' : null;
       confirmPassword = value;
     });
   }
