@@ -10,8 +10,18 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  TextEditingController usernameController = TextEditingController();
-  GlobalKey<FormState> usernameFormKey = GlobalKey<FormState>();
+  late TextEditingController usernameController;
+
+  late GlobalKey<FormState> usernameFormKey;
+  late FocusNode focusNodeUsername;
+
+  @override
+  void initState() {
+    usernameController = TextEditingController();
+    usernameFormKey = GlobalKey<FormState>();
+    focusNodeUsername = FocusNode();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +42,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         child: Column(
           children: [
             InputApp(
+              focusNode: focusNodeUsername,
               validator: _validator,
               formKey: usernameFormKey,
               controller: usernameController,
@@ -60,6 +71,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   _submitForgotPassword() {
     final validateUsername = usernameFormKey.currentState?.validate() ?? false;
-    if (validateUsername) {}
+    if (validateUsername) {
+    } else {
+      focusNodeUsername.requestFocus();
+    }
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    focusNodeUsername.dispose();
+    super.dispose();
   }
 }

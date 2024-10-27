@@ -13,15 +13,29 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-  GlobalKey<FormState> usernameFormKey = GlobalKey<FormState>();
-  GlobalKey<FormState> passwordFormKey = GlobalKey<FormState>();
-  GlobalKey<FormState> confirmPasswordFormKey = GlobalKey<FormState>();
+  late TextEditingController usernameController = TextEditingController();
+  late TextEditingController passwordController = TextEditingController();
+  late TextEditingController confirmPasswordController = TextEditingController();
+  late GlobalKey<FormState> usernameFormKey = GlobalKey<FormState>();
+  late GlobalKey<FormState> passwordFormKey = GlobalKey<FormState>();
+  late GlobalKey<FormState> confirmPasswordFormKey = GlobalKey<FormState>();
+  late FocusNode focusNodeUsername, focusNodePassword, focusNodeConfirmPassword;
 
   bool isShowPassword = false, isConfirmShowPassword = false;
-  String? confirmPasswordError;
+
+  @override
+  void initState() {
+    usernameController = TextEditingController();
+    passwordController = TextEditingController();
+    confirmPasswordController = TextEditingController();
+    usernameFormKey = GlobalKey<FormState>();
+    passwordFormKey = GlobalKey<FormState>();
+    confirmPasswordFormKey = GlobalKey<FormState>();
+    focusNodeUsername = FocusNode();
+    focusNodePassword = FocusNode();
+    focusNodeConfirmPassword = FocusNode();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 16,
             ),
             InputApp(
+              focusNode: focusNodeUsername,
               validator: _validator,
               formKey: usernameFormKey,
               controller: usernameController,
@@ -63,6 +78,7 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 16,
             ),
             InputPasswordWidget(
+              focusNode: focusNodePassword,
               validator: (value) => _validatorPassword(value: value, checkConfirm: false),
               formKey: passwordFormKey,
               controller: passwordController,
@@ -75,6 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 16,
             ),
             InputPasswordWidget(
+              focusNode: focusNodeConfirmPassword,
               validator: (value) => _validatorPassword(value: value, checkConfirm: true),
               formKey: confirmPasswordFormKey,
               controller: confirmPasswordController,
@@ -105,13 +122,21 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   String? _validatorPassword({String? value, bool checkConfirm = false}) {
+    final password = passwordController.text;
+    final confirmPassword = confirmPasswordController.text;
     if ((value == null || value.isEmpty)) {
       return 'Mật khẩu không được để trống';
     }
     if (!RegexInput.regex.hasMatch(value)) {
       return 'Sai định dạng mật khẩu';
     }
-    return checkConfirm ? confirmPasswordError : null;
+    if (checkConfirm &&
+        password != confirmPassword &&
+        confirmPassword.isNotEmpty &&
+        password.isNotEmpty) {
+      return 'Mật khẩu không trùng khớp';
+    }
+    return null;
   }
 
   String? _validator(String? value) {
@@ -135,17 +160,28 @@ class _RegisterPageState extends State<RegisterPage> {
     final bool isValidUsername = usernameFormKey.currentState?.validate() ?? false;
     final bool isValidPassword = passwordFormKey.currentState?.validate() ?? false;
     final bool isValidConfirmPassword = confirmPasswordFormKey.currentState?.validate() ?? false;
-    final password = passwordController.text;
-    final confirmPassword = confirmPasswordController.text;
-    setState(() {
-      confirmPasswordError = password != confirmPassword && confirmPassword.isNotEmpty
-          ? 'Mật khẩu không trùng khớp'
-          : null;
-    });
-    if (isValidUsername && isValidPassword && isValidConfirmPassword) {}
+    if (isValidUsername && isValidPassword && isValidConfirmPassword) {
+    } else if (!isValidUsername) {
+      focusNodeUsername.requestFocus();
+    } else if (!isValidPassword) {
+      focusNodePassword.requestFocus();
+    } else if (!isValidConfirmPassword) {
+      focusNodeConfirmPassword.requestFocus();
+    }
   }
 
   _nextLoginScreen({required BuildContext context}) {
     Navigator.of(context).pop();
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    focusNodeUsername.dispose();
+    focusNodePassword.dispose();
+    focusNodeConfirmPassword .dispose();
+    super.dispose();
   }
 }
