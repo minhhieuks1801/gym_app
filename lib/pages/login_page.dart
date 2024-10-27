@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_app/common/ultils/regex.dart';
 import 'package:gym_app/pages/forgot_password.dart';
 import 'package:gym_app/pages/register_page.dart';
 import 'package:gym_app/widget/button_app.dart';
@@ -15,12 +16,22 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  late TextEditingController usernameController;
+  late TextEditingController passwordController;
   GlobalKey<FormState> usernameFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> passwordFormKey = GlobalKey<FormState>();
   String? passwordError;
   bool isShowPassword = false, isCheck = false, isSubmit = false;
+  late FocusNode focusNodeUsername, focusNodePassword;
+
+  @override
+  void initState() {
+    usernameController = TextEditingController();
+    passwordController = TextEditingController();
+    focusNodeUsername = FocusNode();
+    focusNodePassword = FocusNode();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 16,
             ),
             InputApp(
+              focusNode: focusNodeUsername,
               validator: _validator,
               formKey: usernameFormKey,
               hintText: 'Tên tài khoản',
@@ -56,6 +68,8 @@ class _LoginPageState extends State<LoginPage> {
               height: 16,
             ),
             InputPasswordWidget(
+              validator: _validatorPassword,
+              focusNode: focusNodePassword,
               formKey: passwordFormKey,
               hintText: 'Mật khẩu',
               title: 'Mật khẩu',
@@ -95,6 +109,16 @@ class _LoginPageState extends State<LoginPage> {
     return (value == null || value.isEmpty) ? 'Tên tài khoản không được để trống' : null;
   }
 
+  String? _validatorPassword(String? value) {
+    if ((value == null || value.isEmpty)) {
+      return 'Mật khẩu không được để trống';
+    }
+    if (!RegexInput.regex.hasMatch(value)) {
+      return 'Sai định dạng mật khẩu';
+    }
+    return null;
+  }
+
   _isShowPassword() {
     setState(() {
       isShowPassword = !isShowPassword;
@@ -104,7 +128,13 @@ class _LoginPageState extends State<LoginPage> {
   _submitLogin() {
     final bool isValidUsername = usernameFormKey.currentState?.validate() ?? false;
     final bool isValidPassword = passwordFormKey.currentState?.validate() ?? false;
-    if (isValidUsername && isValidPassword) {}
+
+    if (isValidUsername && isValidPassword) {
+    } else if(!isValidUsername) {
+      focusNodeUsername.requestFocus();
+    } else if(!isValidPassword){
+      focusNodePassword.requestFocus();
+    }
   }
 
   _nextRegisterScreen({required BuildContext context}) {

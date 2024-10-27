@@ -9,6 +9,7 @@ class InputPasswordWidget extends StatefulWidget {
   final TextEditingController controller;
   final GlobalKey<FormState> formKey;
   final FormFieldValidator<String>? validator;
+  final FocusNode? focusNode;
 
   const InputPasswordWidget({
     super.key,
@@ -18,7 +19,7 @@ class InputPasswordWidget extends StatefulWidget {
     this.isShowPassword = false,
     required this.controller,
     required this.formKey,
-    this.validator,
+    this.validator, this.focusNode,
   });
 
   @override
@@ -45,6 +46,7 @@ class _InputPasswordWidgetState extends State<InputPasswordWidget> {
         Form(
           key: widget.formKey,
           child: TextFormField(
+            focusNode: widget.focusNode,
             controller: widget.controller,
             validator: widget.validator,
             obscureText: widget.isShowPassword,

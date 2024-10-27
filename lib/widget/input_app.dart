@@ -6,13 +6,14 @@ class InputApp extends StatefulWidget {
   final String title;
   final GlobalKey<FormState> formKey;
   final FormFieldValidator<String>? validator;
+  final FocusNode? focusNode;
 
 
   const InputApp({
     required this.controller,
     super.key,
     this.hintText = '',
-    required this.title, required this.formKey, this.validator,
+    required this.title, required this.formKey, this.validator, this.focusNode,
   });
 
   @override
@@ -40,6 +41,7 @@ class _InputAppState extends State<InputApp> {
         Form(
           key: widget.formKey,
           child: TextFormField(
+            focusNode: widget.focusNode,
             controller: widget.controller,
             validator: widget.validator,
             decoration: InputDecoration(
