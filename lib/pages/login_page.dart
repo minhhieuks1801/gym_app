@@ -5,7 +5,7 @@ import 'package:gym_app/widget/button_app.dart';
 import 'package:gym_app/widget/check_box_save_login.dart';
 import 'package:gym_app/widget/footer_login.dart';
 import 'package:gym_app/widget/input_password.dart';
-import 'package:gym_app/widget/input_app_user_name.dart';
+import 'package:gym_app/widget/input_app.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -45,7 +45,8 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 16,
             ),
-            InputAppUserNameWidget(
+            InputApp(
+              validator: _validator,
               formKey: usernameFormKey,
               hintText: 'Tên tài khoản',
               title: 'Tên tài khoản',
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 32,
             ),
-            ButtonApp(
+            ButtonElevatedApp(
               title: 'Đăng nhập',
               callback: () => _submitLogin(),
             ),
@@ -90,6 +91,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  String? _validator(String? value) {
+    return (value == null || value.isEmpty) ? 'Tên tài khoản không được để trống' : null;
+  }
+
   _isShowPassword() {
     setState(() {
       isShowPassword = !isShowPassword;
@@ -99,9 +104,7 @@ class _LoginPageState extends State<LoginPage> {
   _submitLogin() {
     final bool isValidUsername = usernameFormKey.currentState?.validate() ?? false;
     final bool isValidPassword = passwordFormKey.currentState?.validate() ?? false;
-    if (isValidUsername && isValidPassword) {
-
-    }
+    if (isValidUsername && isValidPassword) {}
   }
 
   _nextRegisterScreen({required BuildContext context}) {

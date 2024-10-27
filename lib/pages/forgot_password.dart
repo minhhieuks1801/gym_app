@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_app/widget/button_app.dart';
-import 'package:gym_app/widget/input_app_user_name.dart';
+import 'package:gym_app/widget/input_app.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -31,7 +31,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         padding: const EdgeInsets.all(18),
         child: Column(
           children: [
-            InputAppUserNameWidget(
+            InputApp(
+              validator: _validator,
               formKey: usernameFormKey,
               controller: usernameController,
               hintText: 'Tên tài khoản',
@@ -42,7 +43,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ButtonApp(
+              child: ButtonElevatedApp(
                 title: 'Quên mật khẩu',
                 callback: () => _submitForgotPassword(),
               ),
@@ -51,6 +52,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ),
       ),
     );
+  }
+
+  String? _validator(String? value) {
+    return (value == null || value.isEmpty) ? 'Tên tài khoản không được để trống' : null;
   }
 
   _submitForgotPassword() {

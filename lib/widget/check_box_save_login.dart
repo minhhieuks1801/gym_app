@@ -36,7 +36,7 @@ class CheckboxSaveLoginWidget extends StatelessWidget {
         ),
         Row(
           children: [
-            InkWell(
+            GestureDetector(
               onTap: () => callbackForgotPassword.call(),
               child: const Text(
                 'Quên mật khẩu',

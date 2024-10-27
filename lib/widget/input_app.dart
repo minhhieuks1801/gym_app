@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 
-class InputAppUserNameWidget extends StatefulWidget {
+class InputApp extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final String title;
   final GlobalKey<FormState> formKey;
+  final FormFieldValidator<String>? validator;
 
 
-  const InputAppUserNameWidget({
+  const InputApp({
     required this.controller,
     super.key,
     this.hintText = '',
-    required this.title, required this.formKey,
+    required this.title, required this.formKey, this.validator,
   });
 
   @override
-  State<InputAppUserNameWidget> createState() => _InputAppUserNameWidgetState();
+  State<InputApp> createState() => _InputAppState();
 }
 
-class _InputAppUserNameWidgetState extends State<InputAppUserNameWidget> {
+class _InputAppState extends State<InputApp> {
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class _InputAppUserNameWidgetState extends State<InputAppUserNameWidget> {
           key: widget.formKey,
           child: TextFormField(
             controller: widget.controller,
-            validator: _validator,
+            validator: widget.validator,
             decoration: InputDecoration(
               hintText: widget.hintText,
               helperStyle: const TextStyle(
@@ -61,11 +62,5 @@ class _InputAppUserNameWidgetState extends State<InputAppUserNameWidget> {
         ),
       ],
     );
-  }
-
-  String? _validator(String? value) {
-    return (value == null || value.isEmpty)
-        ? 'Tên tài khoản không được để trống'
-        : null;
   }
 }

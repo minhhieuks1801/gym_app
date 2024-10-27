@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gym_app/common/ultils/regex.dart';
 import 'package:gym_app/widget/button_app.dart';
 import 'package:gym_app/widget/footer_login.dart';
-import 'package:gym_app/widget/input_app_user_name.dart';
+import 'package:gym_app/widget/input_app.dart';
 import 'package:gym_app/widget/input_password.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -51,7 +52,8 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 16,
             ),
-            InputAppUserNameWidget(
+            InputApp(
+              validator: _validator,
               formKey: usernameFormKey,
               controller: usernameController,
               hintText: 'Tên tài khoản',
@@ -61,6 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 16,
             ),
             InputPasswordWidget(
+              validator: (value) => _validatorPassword(value: value, checkConfirm: false),
               formKey: passwordFormKey,
               controller: passwordController,
               hintText: 'Mật khẩu',
@@ -72,8 +75,8 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 16,
             ),
             InputPasswordWidget(
+              validator: (value) => _validatorPassword(value: value, checkConfirm: true),
               formKey: confirmPasswordFormKey,
-              error: confirmPasswordError,
               controller: confirmPasswordController,
               hintText: 'Nhập lại mật khẩu',
               title: 'Nhập lại mật khẩu',
@@ -83,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 32,
             ),
-            ButtonApp(
+            ButtonElevatedApp(
               title: 'Đăng ký',
               callback: () => _submitRegister(),
             ),
@@ -99,6 +102,20 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  String? _validatorPassword({String? value, bool checkConfirm = false}) {
+    if ((value == null || value.isEmpty)) {
+      return 'Mật khẩu không được để trống';
+    }
+    if (!RegexInput.regex.hasMatch(value)) {
+      return 'Sai định dạng mật khẩu';
+    }
+    return checkConfirm ? confirmPasswordError : null;
+  }
+
+  String? _validator(String? value) {
+    return (value == null || value.isEmpty) ? 'Tên tài khoản không được để trống' : null;
   }
 
   _isShowPassword() {

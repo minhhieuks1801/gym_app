@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gym_app/common/ultils/regex.dart';
 
 class InputPasswordWidget extends StatefulWidget {
   final VoidCallback showPassword;
   final bool isShowPassword;
   final String hintText;
   final String title;
-  final String? error;
   final TextEditingController controller;
   final GlobalKey<FormState> formKey;
+  final FormFieldValidator<String>? validator;
 
   const InputPasswordWidget({
     super.key,
@@ -17,9 +16,9 @@ class InputPasswordWidget extends StatefulWidget {
     required this.title,
     required this.showPassword,
     this.isShowPassword = false,
-    this.error,
     required this.controller,
     required this.formKey,
+    this.validator,
   });
 
   @override
@@ -47,12 +46,12 @@ class _InputPasswordWidgetState extends State<InputPasswordWidget> {
           key: widget.formKey,
           child: TextFormField(
             controller: widget.controller,
-            validator: _validator,
+            validator: widget.validator,
             obscureText: widget.isShowPassword,
             decoration: InputDecoration(
-              suffixIcon: InkWell(
-                onTap: () => widget.showPassword.call(),
-                child: Icon(
+              suffixIcon: IconButton(
+                onPressed: () => widget.showPassword.call(),
+                icon: Icon(
                   widget.isShowPassword ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
                   color: Colors.black.withOpacity(0.5),
                   size: 20,
@@ -73,15 +72,5 @@ class _InputPasswordWidgetState extends State<InputPasswordWidget> {
         ),
       ],
     );
-  }
-
-  String? _validator(String? value) {
-    if ((value == null || value.isEmpty)) {
-      return 'Mật khẩu không được để trống';
-    }
-    if (!RegexInput.regex.hasMatch(value)) {
-      return 'Sai định dạng mật khẩu';
-    }
-    return widget.error;
   }
 }

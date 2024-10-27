@@ -24,7 +24,7 @@ class FooterLoginWidget extends StatelessWidget {
         const SizedBox(
           width: 8,
         ),
-        InkWell(
+        GestureDetector(
           onTap: () => callback.call(),
           child: Text(
             isLogin ? 'Đăng ký ngay' : 'Đăng nhập ngay',
@@ -36,7 +36,7 @@ class FooterLoginWidget extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-        )
+        ),
       ],
     );
   }
