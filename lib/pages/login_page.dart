@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gym_app/common/ultils/regex.dart';
 import 'package:gym_app/pages/forgot_password.dart';
 import 'package:gym_app/pages/register_page.dart';
-import 'package:gym_app/widget/button_app.dart';
 import 'package:gym_app/widget/check_box_save_login.dart';
 import 'package:gym_app/widget/footer_login.dart';
 import 'package:gym_app/widget/input_password.dart';
@@ -21,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   GlobalKey<FormState> usernameFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> passwordFormKey = GlobalKey<FormState>();
   String? passwordError;
-  bool isShowPassword = false, isCheck = false, isSubmit = false;
+  bool isShowPassword = false, isSaveLogin = false;
   late FocusNode focusNodeUsername, focusNodePassword;
 
   @override
@@ -35,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
@@ -43,20 +43,18 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Expanded(child: SizedBox()),
-            const Text(
+            Text(
               'GYM APP',
               textAlign: TextAlign.center,
               maxLines: 2,
-              style: TextStyle(
-                color: Colors.teal,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
+              style: theme.textTheme.titleLarge
+                  ?.copyWith(color: const Color.fromARGB(255, 7, 255, 164)),
             ),
             const SizedBox(
               height: 16,
             ),
             InputApp(
+              textInputAction: TextInputAction.next,
               focusNode: focusNodeUsername,
               validator: _validator,
               formKey: usernameFormKey,
@@ -68,6 +66,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 16,
             ),
             InputPasswordWidget(
+              textInputAction: TextInputAction.none,
               validator: _validatorPassword,
               focusNode: focusNodePassword,
               formKey: passwordFormKey,
@@ -81,16 +80,21 @@ class _LoginPageState extends State<LoginPage> {
               height: 16,
             ),
             CheckboxSaveLoginWidget(
-              isCheck: isCheck,
+              isValueCheckbox: isSaveLogin,
               callbackSave: () => _setSaveLogin(),
-              callbackForgotPassword: () => _nextForgotPasswordScreen(context: context),
+              callbackForgotPassword: () =>
+                  _nextForgotPasswordScreen(context: context),
             ),
             const SizedBox(
               height: 32,
             ),
-            ButtonElevatedApp(
-              title: 'Đăng nhập',
-              callback: () => _submitLogin(),
+            ElevatedButton(
+              onPressed: () => _submitLogin(),
+              child: Text(
+                'Đăng nhập',
+                style:
+                    theme.textTheme.titleMedium?.copyWith(color: Colors.white),
+              ),
             ),
             const Expanded(child: SizedBox()),
             FooterLoginWidget(
@@ -106,7 +110,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   String? _validator(String? value) {
-    return (value == null || value.isEmpty) ? 'Tên tài khoản không được để trống' : null;
+    return (value == null || value.isEmpty)
+        ? 'Tên tài khoản không được để trống'
+        : null;
   }
 
   String? _validatorPassword(String? value) {
@@ -126,13 +132,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _submitLogin() {
-    final bool isValidUsername = usernameFormKey.currentState?.validate() ?? false;
-    final bool isValidPassword = passwordFormKey.currentState?.validate() ?? false;
+    final bool isValidUsername =
+        usernameFormKey.currentState?.validate() ?? false;
+    final bool isValidPassword =
+        passwordFormKey.currentState?.validate() ?? false;
 
     if (isValidUsername && isValidPassword) {
-    } else if(!isValidUsername) {
+    } else if (!isValidUsername) {
       focusNodeUsername.requestFocus();
-    } else if(!isValidPassword){
+    } else if (!isValidPassword) {
       focusNodePassword.requestFocus();
     }
   }
@@ -147,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
 
   _setSaveLogin() {
     setState(() {
-      isCheck = !isCheck;
+      isSaveLogin = !isSaveLogin;
     });
   }
 

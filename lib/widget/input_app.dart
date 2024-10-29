@@ -7,13 +7,18 @@ class InputApp extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final FormFieldValidator<String>? validator;
   final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
 
 
   const InputApp({
     required this.controller,
     super.key,
     this.hintText = '',
-    required this.title, required this.formKey, this.validator, this.focusNode,
+    required this.title, 
+    required this.formKey, 
+    this.validator, 
+    this.focusNode, 
+    this.textInputAction,
   });
 
   @override
@@ -24,16 +29,13 @@ class _InputAppState extends State<InputApp> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           widget.title,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: theme.textTheme.labelMedium,
         ),
         const SizedBox(
           height: 8,
@@ -41,6 +43,7 @@ class _InputAppState extends State<InputApp> {
         Form(
           key: widget.formKey,
           child: TextFormField(
+            textInputAction: widget.textInputAction,
             focusNode: widget.focusNode,
             controller: widget.controller,
             validator: widget.validator,

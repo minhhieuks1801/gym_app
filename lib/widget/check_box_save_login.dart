@@ -1,36 +1,33 @@
 import 'package:flutter/material.dart';
 
 class CheckboxSaveLoginWidget extends StatelessWidget {
-  final bool isCheck;
+  final bool isValueCheckbox;
   final VoidCallback callbackSave;
   final VoidCallback callbackForgotPassword;
 
   const CheckboxSaveLoginWidget(
       {super.key,
-      this.isCheck = false,
+      this.isValueCheckbox = false,
       required this.callbackSave,
       required this.callbackForgotPassword});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
             Checkbox(
-              value: isCheck,
+              value: isValueCheckbox,
               onChanged: (value) => callbackSave.call(),
             ),
-            const Text(
+            Text(
               'Lưu đăng nhập',
               textAlign: TextAlign.center,
               maxLines: 2,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
+              style: theme.textTheme.titleSmall,
             ),
           ],
         ),
@@ -38,15 +35,11 @@ class CheckboxSaveLoginWidget extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () => callbackForgotPassword.call(),
-              child: const Text(
+              child: Text(
                 'Quên mật khẩu',
                 textAlign: TextAlign.center,
                 maxLines: 2,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: theme.textTheme.titleSmall,
               ),
             ),
             const SizedBox(

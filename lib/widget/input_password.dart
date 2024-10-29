@@ -10,6 +10,7 @@ class InputPasswordWidget extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final FormFieldValidator<String>? validator;
   final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
 
   const InputPasswordWidget({
     super.key,
@@ -19,7 +20,9 @@ class InputPasswordWidget extends StatefulWidget {
     this.isShowPassword = false,
     required this.controller,
     required this.formKey,
-    this.validator, this.focusNode,
+    this.validator,
+    this.focusNode,
+    this.textInputAction,
   });
 
   @override
@@ -29,16 +32,13 @@ class InputPasswordWidget extends StatefulWidget {
 class _InputPasswordWidgetState extends State<InputPasswordWidget> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           widget.title,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: theme.textTheme.labelMedium,
         ),
         const SizedBox(
           height: 8,
@@ -46,6 +46,7 @@ class _InputPasswordWidgetState extends State<InputPasswordWidget> {
         Form(
           key: widget.formKey,
           child: TextFormField(
+            textInputAction: widget.textInputAction,
             focusNode: widget.focusNode,
             controller: widget.controller,
             validator: widget.validator,
@@ -54,7 +55,9 @@ class _InputPasswordWidgetState extends State<InputPasswordWidget> {
               suffixIcon: IconButton(
                 onPressed: () => widget.showPassword.call(),
                 icon: Icon(
-                  widget.isShowPassword ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
+                  widget.isShowPassword
+                      ? CupertinoIcons.eye
+                      : CupertinoIcons.eye_slash,
                   color: Colors.black.withOpacity(0.5),
                   size: 20,
                 ),

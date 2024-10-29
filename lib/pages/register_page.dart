@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gym_app/common/ultils/regex.dart';
-import 'package:gym_app/widget/button_app.dart';
 import 'package:gym_app/widget/footer_login.dart';
 import 'package:gym_app/widget/input_app.dart';
 import 'package:gym_app/widget/input_password.dart';
@@ -15,7 +14,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   late TextEditingController usernameController = TextEditingController();
   late TextEditingController passwordController = TextEditingController();
-  late TextEditingController confirmPasswordController = TextEditingController();
+  late TextEditingController confirmPasswordController =
+      TextEditingController();
   late GlobalKey<FormState> usernameFormKey = GlobalKey<FormState>();
   late GlobalKey<FormState> passwordFormKey = GlobalKey<FormState>();
   late GlobalKey<FormState> confirmPasswordFormKey = GlobalKey<FormState>();
@@ -39,6 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -47,7 +48,6 @@ class _RegisterPageState extends State<RegisterPage> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Expanded(flex: 1, child: SizedBox()),
             const Align(
@@ -67,6 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 16,
             ),
             InputApp(
+              textInputAction: TextInputAction.next,
               focusNode: focusNodeUsername,
               validator: _validator,
               formKey: usernameFormKey,
@@ -78,8 +79,10 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 16,
             ),
             InputPasswordWidget(
+              textInputAction: TextInputAction.next,
               focusNode: focusNodePassword,
-              validator: (value) => _validatorPassword(value: value, checkConfirm: false),
+              validator: (value) =>
+                  _validatorPassword(value: value, checkConfirm: false),
               formKey: passwordFormKey,
               controller: passwordController,
               hintText: 'Mật khẩu',
@@ -91,8 +94,10 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 16,
             ),
             InputPasswordWidget(
+              textInputAction: TextInputAction.none,
               focusNode: focusNodeConfirmPassword,
-              validator: (value) => _validatorPassword(value: value, checkConfirm: true),
+              validator: (value) =>
+                  _validatorPassword(value: value, checkConfirm: true),
               formKey: confirmPasswordFormKey,
               controller: confirmPasswordController,
               hintText: 'Nhập lại mật khẩu',
@@ -103,9 +108,13 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 32,
             ),
-            ButtonElevatedApp(
-              title: 'Đăng ký',
-              callback: () => _submitRegister(),
+            ElevatedButton(
+              onPressed: () => _submitRegister(),
+              child: Text(
+                'Đăng ký',
+                style:
+                    theme.textTheme.titleMedium?.copyWith(color: Colors.white),
+              ),
             ),
             const Expanded(flex: 2, child: SizedBox()),
             FooterLoginWidget(
@@ -140,7 +149,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   String? _validator(String? value) {
-    return (value == null || value.isEmpty) ? 'Tên tài khoản không được để trống' : null;
+    return (value == null || value.isEmpty)
+        ? 'Tên tài khoản không được để trống'
+        : null;
   }
 
   _isShowPassword() {
@@ -157,9 +168,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _submitRegister() {
     //final username = usernameController.text;
-    final bool isValidUsername = usernameFormKey.currentState?.validate() ?? false;
-    final bool isValidPassword = passwordFormKey.currentState?.validate() ?? false;
-    final bool isValidConfirmPassword = confirmPasswordFormKey.currentState?.validate() ?? false;
+    final bool isValidUsername =
+        usernameFormKey.currentState?.validate() ?? false;
+    final bool isValidPassword =
+        passwordFormKey.currentState?.validate() ?? false;
+    final bool isValidConfirmPassword =
+        confirmPasswordFormKey.currentState?.validate() ?? false;
     if (isValidUsername && isValidPassword && isValidConfirmPassword) {
     } else if (!isValidUsername) {
       focusNodeUsername.requestFocus();
@@ -181,7 +195,7 @@ class _RegisterPageState extends State<RegisterPage> {
     confirmPasswordController.dispose();
     focusNodeUsername.dispose();
     focusNodePassword.dispose();
-    focusNodeConfirmPassword .dispose();
+    focusNodeConfirmPassword.dispose();
     super.dispose();
   }
 }

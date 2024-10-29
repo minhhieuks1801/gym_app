@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_app/common/theme/custom_theme.dart';
 import 'package:gym_app/pages/login_page.dart';
 
 void main() {
@@ -15,9 +16,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeCustom.theme,
       title: 'GYM APP',
-      home: LoginPage()
+      home: const LoginPage()
     );
   }
 }

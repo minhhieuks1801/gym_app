@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gym_app/widget/button_app.dart';
 import 'package:gym_app/widget/input_app.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -25,17 +24,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-          title: const Text(
-            'Quên mật khẩu',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+          title: Text('Quên mật khẩu', style: theme.textTheme.labelMedium),
           centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(18),
@@ -52,11 +45,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             const SizedBox(
               height: 32,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ButtonElevatedApp(
-                title: 'Quên mật khẩu',
-                callback: () => _submitForgotPassword(),
+            ElevatedButton(
+              onPressed: () => _submitForgotPassword(),
+              child: Text(
+                'Quên mật khẩu',
+                style:
+                    theme.textTheme.titleMedium?.copyWith(color: Colors.white),
               ),
             ),
           ],
@@ -66,7 +60,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   String? _validator(String? value) {
-    return (value == null || value.isEmpty) ? 'Tên tài khoản không được để trống' : null;
+    return (value == null || value.isEmpty)
+        ? 'Tên tài khoản không được để trống'
+        : null;
   }
 
   _submitForgotPassword() {
