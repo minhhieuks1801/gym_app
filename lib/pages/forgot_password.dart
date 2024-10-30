@@ -11,13 +11,14 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   late TextEditingController usernameController;
 
-  late GlobalKey<FormState> usernameFormKey;
+  late GlobalKey<FormState> formKey;
   late FocusNode focusNodeUsername;
+  bool isCansubmit = false;
 
   @override
   void initState() {
     usernameController = TextEditingController();
-    usernameFormKey = GlobalKey<FormState>();
+    formKey = GlobalKey<FormState>();
     focusNodeUsername = FocusNode();
     super.initState();
   }
@@ -32,28 +33,36 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(18),
-        child: Column(
-          children: [
-            InputApp(
-              focusNode: focusNodeUsername,
-              validator: _validator,
-              formKey: usernameFormKey,
-              controller: usernameController,
-              hintText: 'Tên tài khoản',
-              title: 'Tên tài khoản',
-            ),
-            const SizedBox(
-              height: 32,
-            ),
-            ElevatedButton(
-              onPressed: () => _submitForgotPassword(),
-              child: Text(
-                'Quên mật khẩu',
-                style:
-                    theme.textTheme.titleMedium?.copyWith(color: Colors.white),
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              InputApp(
+                focusNode: focusNodeUsername,
+                textInputAction: TextInputAction.done,
+                validator: _validator,
+                changeValue: (value) => _onChange(),
+                onFieldSubmitted: () => _submitForgotPassword(),
+                controller: usernameController,
+                hintText: 'Tên tài khoản',
+                title: 'Tên tài khoản',
               ),
-            ),
-          ],
+              const SizedBox(
+                height: 32,
+              ),
+              ElevatedButton(
+                onPressed: () => _submitForgotPassword(),
+                style: theme.elevatedButtonTheme.style?.copyWith(
+                    backgroundColor: MaterialStatePropertyAll<Color>(
+                        isCansubmit ? Colors.blue : Colors.grey)),
+                child: Text(
+                  'Quên mật khẩu',
+                  style: theme.textTheme.titleMedium
+                      ?.copyWith(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -66,10 +75,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   _submitForgotPassword() {
-    final validateUsername = usernameFormKey.currentState?.validate() ?? false;
-    if (validateUsername) {
-    } else {
-      focusNodeUsername.requestFocus();
+    final isvalidate = formKey.currentState?.validate() ?? false;
+    if (isvalidate) {
+      ///Đạt điều kieenj submit
     }
   }
 
@@ -78,5 +86,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     usernameController.dispose();
     focusNodeUsername.dispose();
     super.dispose();
+  }
+
+  _onChange() {
+    setState(() {
+      isCansubmit = formKey.currentState?.validate() ?? false;
+    });
   }
 }

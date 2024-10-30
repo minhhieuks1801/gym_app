@@ -7,10 +7,11 @@ class InputPasswordWidget extends StatefulWidget {
   final String hintText;
   final String title;
   final TextEditingController controller;
-  final GlobalKey<FormState> formKey;
   final FormFieldValidator<String>? validator;
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
+  final ValueChanged<String> changeValuePassword;
+  final VoidCallback? onFieldSubmitted;
 
   const InputPasswordWidget({
     super.key,
@@ -19,10 +20,11 @@ class InputPasswordWidget extends StatefulWidget {
     required this.showPassword,
     this.isShowPassword = false,
     required this.controller,
-    required this.formKey,
     this.validator,
     this.focusNode,
     this.textInputAction,
+    required this.changeValuePassword,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -43,34 +45,33 @@ class _InputPasswordWidgetState extends State<InputPasswordWidget> {
         const SizedBox(
           height: 8,
         ),
-        Form(
-          key: widget.formKey,
-          child: TextFormField(
-            textInputAction: widget.textInputAction,
-            focusNode: widget.focusNode,
-            controller: widget.controller,
-            validator: widget.validator,
-            obscureText: widget.isShowPassword,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                onPressed: () => widget.showPassword.call(),
-                icon: Icon(
-                  widget.isShowPassword
-                      ? CupertinoIcons.eye
-                      : CupertinoIcons.eye_slash,
-                  color: Colors.black.withOpacity(0.5),
-                  size: 20,
-                ),
-              ),
-              hintText: widget.hintText,
-              hintStyle: TextStyle(
+        TextFormField(
+          textInputAction: widget.textInputAction,
+          onFieldSubmitted: (value) => widget.onFieldSubmitted?.call(),
+          focusNode: widget.focusNode,
+          controller: widget.controller,
+          validator: widget.validator,
+          onChanged: (value) => widget.changeValuePassword(value),
+          obscureText: widget.isShowPassword,
+          decoration: InputDecoration(
+            suffixIcon: IconButton(
+              onPressed: () => widget.showPassword.call(),
+              icon: Icon(
+                !widget.isShowPassword
+                    ? CupertinoIcons.eye
+                    : CupertinoIcons.eye_slash,
                 color: Colors.black.withOpacity(0.5),
-                fontSize: 16,
+                size: 20,
               ),
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8),
-                ),
+            ),
+            hintText: widget.hintText,
+            hintStyle: TextStyle(
+              color: Colors.black.withOpacity(0.5),
+              fontSize: 16,
+            ),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
               ),
             ),
           ),

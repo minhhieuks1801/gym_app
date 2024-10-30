@@ -16,11 +16,9 @@ class _RegisterPageState extends State<RegisterPage> {
   late TextEditingController passwordController = TextEditingController();
   late TextEditingController confirmPasswordController =
       TextEditingController();
-  late GlobalKey<FormState> usernameFormKey = GlobalKey<FormState>();
-  late GlobalKey<FormState> passwordFormKey = GlobalKey<FormState>();
-  late GlobalKey<FormState> confirmPasswordFormKey = GlobalKey<FormState>();
+  late GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late FocusNode focusNodeUsername, focusNodePassword, focusNodeConfirmPassword;
-
+  bool isCansubmit = false;
   bool isShowPassword = false, isConfirmShowPassword = false;
 
   @override
@@ -28,9 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
     usernameController = TextEditingController();
     passwordController = TextEditingController();
     confirmPasswordController = TextEditingController();
-    usernameFormKey = GlobalKey<FormState>();
-    passwordFormKey = GlobalKey<FormState>();
-    confirmPasswordFormKey = GlobalKey<FormState>();
+    formKey = GlobalKey<FormState>();
     focusNodeUsername = FocusNode();
     focusNodePassword = FocusNode();
     focusNodeConfirmPassword = FocusNode();
@@ -47,84 +43,89 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          children: [
-            const Expanded(flex: 1, child: SizedBox()),
-            const Align(
-              alignment: Alignment.center,
-              child: Text(
-                'ĐĂNG KÝ TÀI KHOẢN',
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                style: TextStyle(
-                  color: Colors.teal,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              const Expanded(flex: 1, child: SizedBox()),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'ĐĂNG KÝ TÀI KHOẢN',
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  style: theme.textTheme.titleLarge
+                      ?.copyWith(color: const Color.fromARGB(255, 7, 255, 164)),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            InputApp(
-              textInputAction: TextInputAction.next,
-              focusNode: focusNodeUsername,
-              validator: _validator,
-              formKey: usernameFormKey,
-              controller: usernameController,
-              hintText: 'Tên tài khoản',
-              title: 'Tên tài khoản',
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            InputPasswordWidget(
-              textInputAction: TextInputAction.next,
-              focusNode: focusNodePassword,
-              validator: (value) =>
-                  _validatorPassword(value: value, checkConfirm: false),
-              formKey: passwordFormKey,
-              controller: passwordController,
-              hintText: 'Mật khẩu',
-              title: 'Mật khẩu',
-              isShowPassword: isShowPassword,
-              showPassword: () => _isShowPassword(),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            InputPasswordWidget(
-              textInputAction: TextInputAction.none,
-              focusNode: focusNodeConfirmPassword,
-              validator: (value) =>
-                  _validatorPassword(value: value, checkConfirm: true),
-              formKey: confirmPasswordFormKey,
-              controller: confirmPasswordController,
-              hintText: 'Nhập lại mật khẩu',
-              title: 'Nhập lại mật khẩu',
-              isShowPassword: isConfirmShowPassword,
-              showPassword: () => _isConfirmShowPassword(),
-            ),
-            const SizedBox(
-              height: 32,
-            ),
-            ElevatedButton(
-              onPressed: () => _submitRegister(),
-              child: Text(
-                'Đăng ký',
-                style:
-                    theme.textTheme.titleMedium?.copyWith(color: Colors.white),
+              const SizedBox(
+                height: 16,
               ),
-            ),
-            const Expanded(flex: 2, child: SizedBox()),
-            FooterLoginWidget(
-              callback: () => _nextLoginScreen(context: context),
-              isLogin: false,
-            ),
-            const SizedBox(
-              height: 32,
-            ),
-          ],
+              InputApp(
+                textInputAction: TextInputAction.next,
+                focusNode: focusNodeUsername,
+                validator: _validatorUsername,
+                changeValue: (value) => _onChange(),
+                controller: usernameController,
+                hintText: 'Tên tài khoản',
+                title: 'Tên tài khoản',
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              InputPasswordWidget(
+                textInputAction: TextInputAction.next,
+                focusNode: focusNodePassword,
+                validator: (value) =>
+                    _validatorPassword(value: value, checkConfirm: false),
+                changeValuePassword: (value) => _onChange(),
+                controller: passwordController,
+                hintText: 'Mật khẩu',
+                title: 'Mật khẩu',
+                isShowPassword: isShowPassword,
+                showPassword: () => _isShowPassword(),
+                onFieldSubmitted: () => _onFieldSubmittedPassword(),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              InputPasswordWidget(
+                textInputAction: TextInputAction.done,
+                focusNode: focusNodeConfirmPassword,
+                validator: (value) =>
+                    _validatorPassword(value: value, checkConfirm: true),
+                changeValuePassword: (value) => _onChange(),
+                controller: confirmPasswordController,
+                hintText: 'Nhập lại mật khẩu',
+                title: 'Nhập lại mật khẩu',
+                isShowPassword: isConfirmShowPassword,
+                showPassword: () => _isConfirmShowPassword(),
+                onFieldSubmitted: () => _submitRegister(),
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              ElevatedButton(
+                onPressed: () => _submitRegister(),
+                style: theme.elevatedButtonTheme.style?.copyWith(
+                    backgroundColor: MaterialStatePropertyAll<Color>(
+                        isCansubmit ? Colors.blue : Colors.grey)),
+                child: Text(
+                  'Đăng ký',
+                  style: theme.textTheme.titleMedium
+                      ?.copyWith(color: Colors.white),
+                ),
+              ),
+              const Expanded(flex: 2, child: SizedBox()),
+              FooterLoginWidget(
+                callback: () => _nextLoginScreen(context: context),
+                isLogin: false,
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -148,7 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return null;
   }
 
-  String? _validator(String? value) {
+  String? _validatorUsername(String? value) {
     return (value == null || value.isEmpty)
         ? 'Tên tài khoản không được để trống'
         : null;
@@ -168,19 +169,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _submitRegister() {
     //final username = usernameController.text;
-    final bool isValidUsername =
-        usernameFormKey.currentState?.validate() ?? false;
-    final bool isValidPassword =
-        passwordFormKey.currentState?.validate() ?? false;
-    final bool isValidConfirmPassword =
-        confirmPasswordFormKey.currentState?.validate() ?? false;
-    if (isValidUsername && isValidPassword && isValidConfirmPassword) {
-    } else if (!isValidUsername) {
-      focusNodeUsername.requestFocus();
-    } else if (!isValidPassword) {
-      focusNodePassword.requestFocus();
-    } else if (!isValidConfirmPassword) {
-      focusNodeConfirmPassword.requestFocus();
+    final bool isValidate = formKey.currentState?.validate() ?? false;
+    if (isValidate) {
+      ///Đạt điều kiện submit
     }
   }
 
@@ -197,5 +188,15 @@ class _RegisterPageState extends State<RegisterPage> {
     focusNodePassword.dispose();
     focusNodeConfirmPassword.dispose();
     super.dispose();
+  }
+
+  _onChange() {
+    setState(() {
+      isCansubmit = formKey.currentState?.validate() ?? false;
+    });
+  }
+
+  _onFieldSubmittedPassword() {
+    focusNodeConfirmPassword.requestFocus();
   }
 }
