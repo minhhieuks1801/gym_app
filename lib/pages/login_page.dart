@@ -19,10 +19,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late TextEditingController usernameController;
   late TextEditingController passwordController;
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late GlobalKey<FormState> formKey;
   bool isShowPassword = false, isSaveLogin = false;
   late FocusNode focusNodeUsername, focusNodePassword;
-  bool isCansubmit = false;
+  bool isCanSubmit = false;
 
   @override
   void initState() {
@@ -30,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
     passwordController = TextEditingController();
     focusNodeUsername = FocusNode();
     focusNodePassword = FocusNode();
+    formKey = GlobalKey<FormState>();
     super.initState();
   }
 
@@ -93,14 +94,9 @@ class _LoginPageState extends State<LoginPage> {
                 height: 32,
               ),
               ElevatedButton(
-                onPressed: () => _submitLogin(),
-                style: theme.elevatedButtonTheme.style?.copyWith(
-                    backgroundColor: MaterialStatePropertyAll<Color>(
-                        isCansubmit ? Colors.blue : Colors.grey)),
-                child: Text(
+                onPressed: isCanSubmit ? () => _submitLogin() : null,
+                child: const Text(
                   'Đăng nhập',
-                  style: theme.textTheme.titleMedium
-                      ?.copyWith(color: Colors.white),
                 ),
               ),
               const Expanded(child: SizedBox()),
@@ -139,12 +135,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  _submitLogin() {
-    final bool isValidate = formKey.currentState?.validate() ?? false;
-    if (isValidate) {
-      ///Đạt điều submit
-    }
-  }
+  _submitLogin() {}
 
   _nextRegisterScreen({required BuildContext context}) {
     Navigator.of(context).push(
@@ -179,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
 
   _onChange() {
     setState(() {
-      isCansubmit = formKey.currentState?.validate() ?? false;
+      isCanSubmit = formKey.currentState?.validate() ?? false;
     });
   }
 }

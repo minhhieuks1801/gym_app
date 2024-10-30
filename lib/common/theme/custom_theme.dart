@@ -30,26 +30,15 @@ class ThemeCustom {
 
     ///ElevatedButton-----------------------------------
     elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all<EdgeInsets>(
-            const EdgeInsets.symmetric(horizontal: 24)),
-
-        ///Cái này đang không hoạt động----------
-        textStyle: MaterialStateProperty.all<TextStyle>(
-          const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        fixedSize: MaterialStateProperty.all(
-          const Size.fromHeight(40),
-        ),
-        backgroundColor: const MaterialStatePropertyAll<Color>(Colors.blue),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          (RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          )),
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+        disabledForegroundColor: Colors.black,
+        disabledBackgroundColor: Colors.grey,
+        backgroundColor: Colors.blue,
+        fixedSize: const Size.fromHeight(40),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
     ),

@@ -13,7 +13,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   late GlobalKey<FormState> formKey;
   late FocusNode focusNodeUsername;
-  bool isCansubmit = false;
+  bool isCanSubmit = false;
 
   @override
   void initState() {
@@ -51,14 +51,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 height: 32,
               ),
               ElevatedButton(
-                onPressed: () => _submitForgotPassword(),
-                style: theme.elevatedButtonTheme.style?.copyWith(
-                    backgroundColor: MaterialStatePropertyAll<Color>(
-                        isCansubmit ? Colors.blue : Colors.grey)),
-                child: Text(
+                onPressed: isCanSubmit ? () => _submitForgotPassword() : null,
+                child: const Text(
                   'Quên mật khẩu',
-                  style: theme.textTheme.titleMedium
-                      ?.copyWith(color: Colors.white),
                 ),
               ),
             ],
@@ -74,12 +69,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         : null;
   }
 
-  _submitForgotPassword() {
-    final isvalidate = formKey.currentState?.validate() ?? false;
-    if (isvalidate) {
-      ///Đạt điều kieenj submit
-    }
-  }
+  _submitForgotPassword() {}
 
   @override
   void dispose() {
@@ -90,7 +80,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   _onChange() {
     setState(() {
-      isCansubmit = formKey.currentState?.validate() ?? false;
+      isCanSubmit = formKey.currentState?.validate() ?? false;
     });
   }
 }

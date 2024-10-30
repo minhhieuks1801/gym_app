@@ -12,13 +12,12 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  late TextEditingController usernameController = TextEditingController();
-  late TextEditingController passwordController = TextEditingController();
-  late TextEditingController confirmPasswordController =
-      TextEditingController();
-  late GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late TextEditingController usernameController;
+  late TextEditingController passwordController;
+  late TextEditingController confirmPasswordController;
+  late GlobalKey<FormState> formKey;
   late FocusNode focusNodeUsername, focusNodePassword, focusNodeConfirmPassword;
-  bool isCansubmit = false;
+  bool isCanSubmit = false;
   bool isShowPassword = false, isConfirmShowPassword = false;
 
   @override
@@ -106,14 +105,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 height: 32,
               ),
               ElevatedButton(
-                onPressed: () => _submitRegister(),
-                style: theme.elevatedButtonTheme.style?.copyWith(
-                    backgroundColor: MaterialStatePropertyAll<Color>(
-                        isCansubmit ? Colors.blue : Colors.grey)),
-                child: Text(
+                onPressed: isCanSubmit ? () => _submitRegister() : null,
+                child: const Text(
                   'Đăng ký',
-                  style: theme.textTheme.titleMedium
-                      ?.copyWith(color: Colors.white),
                 ),
               ),
               const Expanded(flex: 2, child: SizedBox()),
@@ -167,13 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  _submitRegister() {
-    //final username = usernameController.text;
-    final bool isValidate = formKey.currentState?.validate() ?? false;
-    if (isValidate) {
-      ///Đạt điều kiện submit
-    }
-  }
+  _submitRegister() {}
 
   _nextLoginScreen({required BuildContext context}) {
     Navigator.of(context).pop();
@@ -192,7 +180,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _onChange() {
     setState(() {
-      isCansubmit = formKey.currentState?.validate() ?? false;
+      isCanSubmit = formKey.currentState?.validate() ?? false;
     });
   }
 
