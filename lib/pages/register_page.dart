@@ -18,7 +18,6 @@ class _RegisterPageState extends State<RegisterPage> {
   late GlobalKey<FormState> formKey;
   late FocusNode focusNodeUsername, focusNodePassword, focusNodeConfirmPassword;
   bool isCanSubmit = false;
-  bool isShowPassword = false, isConfirmShowPassword = false;
 
   @override
   void initState() {
@@ -81,8 +80,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 controller: passwordController,
                 hintText: 'Mật khẩu',
                 title: 'Mật khẩu',
-                isShowPassword: isShowPassword,
-                showPassword: () => _isShowPassword(),
                 onFieldSubmitted: () => _onFieldSubmittedPassword(),
               ),
               const SizedBox(
@@ -97,8 +94,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 controller: confirmPasswordController,
                 hintText: 'Nhập lại mật khẩu',
                 title: 'Nhập lại mật khẩu',
-                isShowPassword: isConfirmShowPassword,
-                showPassword: () => _isConfirmShowPassword(),
                 onFieldSubmitted: () => _submitRegister(),
               ),
               const SizedBox(
@@ -147,18 +142,6 @@ class _RegisterPageState extends State<RegisterPage> {
     return (value == null || value.isEmpty)
         ? 'Tên tài khoản không được để trống'
         : null;
-  }
-
-  _isShowPassword() {
-    setState(() {
-      isShowPassword = !isShowPassword;
-    });
-  }
-
-  _isConfirmShowPassword() {
-    setState(() {
-      isConfirmShowPassword = !isConfirmShowPassword;
-    });
   }
 
   _submitRegister() {}

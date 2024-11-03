@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   late TextEditingController usernameController;
   late TextEditingController passwordController;
   late GlobalKey<FormState> formKey;
-  bool isShowPassword = false, isSaveLogin = false;
+  bool isSaveLogin = false;
   late FocusNode focusNodeUsername, focusNodePassword;
   bool isCanSubmit = false;
 
@@ -77,8 +77,6 @@ class _LoginPageState extends State<LoginPage> {
                 hintText: 'Mật khẩu',
                 title: 'Mật khẩu',
                 controller: passwordController,
-                isShowPassword: isShowPassword,
-                showPassword: () => _isShowPassword(),
                 onFieldSubmitted: () => _submitLogin(),
               ),
               const SizedBox(
@@ -127,12 +125,6 @@ class _LoginPageState extends State<LoginPage> {
       return 'Sai định dạng mật khẩu';
     }
     return null;
-  }
-
-  _isShowPassword() {
-    setState(() {
-      isShowPassword = !isShowPassword;
-    });
   }
 
   _submitLogin() {}

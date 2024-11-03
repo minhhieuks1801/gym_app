@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class InputPasswordWidget extends StatefulWidget {
-  final VoidCallback showPassword;
-  final bool isShowPassword;
   final String hintText;
   final String title;
   final TextEditingController controller;
@@ -17,8 +15,6 @@ class InputPasswordWidget extends StatefulWidget {
     super.key,
     this.hintText = '',
     required this.title,
-    required this.showPassword,
-    this.isShowPassword = false,
     required this.controller,
     this.validator,
     this.focusNode,
@@ -32,6 +28,8 @@ class InputPasswordWidget extends StatefulWidget {
 }
 
 class _InputPasswordWidgetState extends State<InputPasswordWidget> {
+  bool isShowPassword = false;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -52,14 +50,12 @@ class _InputPasswordWidgetState extends State<InputPasswordWidget> {
           controller: widget.controller,
           validator: widget.validator,
           onChanged: (value) => widget.changeValuePassword(value),
-          obscureText: widget.isShowPassword,
+          obscureText: isShowPassword,
           decoration: InputDecoration(
             suffixIcon: IconButton(
-              onPressed: () => widget.showPassword.call(),
+              onPressed: () => showPassword(),
               icon: Icon(
-                !widget.isShowPassword
-                    ? CupertinoIcons.eye
-                    : CupertinoIcons.eye_slash,
+                isShowPassword ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
                 color: Colors.black.withOpacity(0.5),
                 size: 20,
               ),
@@ -78,5 +74,11 @@ class _InputPasswordWidgetState extends State<InputPasswordWidget> {
         ),
       ],
     );
+  }
+
+  showPassword() {
+    setState(() {
+      isShowPassword = !isShowPassword;
+    });
   }
 }
